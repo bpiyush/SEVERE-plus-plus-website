@@ -1,6 +1,6 @@
 :root {
   --paper: #f5efe3; --paper2: #efe7d7; --ink: #211e19; --muted: #6e675a; --rule: #d9cfba; --heat: #3a342a;
-  --cnn: #c0562e; --vo: #1d6f73; --vt: #6f4b9a;
+  --cnn: #c8313f; --vo: #1d6f73; --vt: #6f4b9a;
   --f-domain: #4d7c35; --f-samples: #b0457f; --f-actions: #2f6aa8; --f-tasks: #a97c0f;
   --mark: #f3d98b;
   --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
@@ -9,7 +9,7 @@
 }
 @media (prefers-color-scheme: dark) {
   :root { --paper: #1c1a16; --paper2: #24211c; --ink: #ece4d3; --muted: #a39a88; --rule: #3a352c; --heat: #e8dcc0;
-    --cnn: #e57f56; --vo: #4cb5b5; --vt: #b394dd; --f-domain: #8fbf70; --f-samples: #e283b5; --f-actions: #7aa8de; --f-tasks: #e0b84f; --mark: #5a4a1b; }
+    --cnn: #f0707a; --vo: #4cb5b5; --vt: #b394dd; --f-domain: #8fbf70; --f-samples: #e283b5; --f-actions: #7aa8de; --f-tasks: #e0b84f; --mark: #5a4a1b; }
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
