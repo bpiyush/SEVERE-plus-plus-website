@@ -57,8 +57,7 @@ figure { margin: 0; }
 figure.big { margin: 14px auto 0; }
 figcaption { font: 400 14px/1.55 var(--sans); color: var(--muted); margin-top: 10px; max-width: 680px; }
 figcaption b { color: var(--ink); font-weight: 600; }
-.fig-frame { background: #fff; border: 1px solid var(--rule); border-radius: 4px; padding: 6px; box-shadow: 2px 3px 0 var(--rule); }
-@media (prefers-color-scheme: dark) { .fig-frame { background: #f5efe3; } }
+@media (prefers-color-scheme: dark) { figure img { background: #f5efe3; border-radius: 4px; padding: 8px; } }
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 38px 0 8px; border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--rule); }
 .stats div { padding: 16px 8px 14px; border-right: 1px solid var(--rule); }
