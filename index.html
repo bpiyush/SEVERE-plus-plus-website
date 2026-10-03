@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEVERE++ — Benchmark Sensitivity in Video Representation Learning</title>
+<meta name="description" content="We evaluate 22 video representation models — CNNs, video-only transformers and video-text transformers — across four downstream factors, in over 1,100 experiments. No single model generalises everywhere.">
+<meta property="og:title" content="SEVERE++: Evaluating Benchmark Sensitivity in Generalization of Video Representation Learning">
+<meta property="og:description" content="22 models, 8 datasets, 7 tasks, 1,100+ experiments. Rankings on Kinetics-400 do not predict how a video model transfers.">
+<meta property="og:image" content="assets/concept.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23211e19'/%3E%3Ctext x='16' y='23' font-family='Georgia' font-size='20' text-anchor='middle' fill='%23f5efe3'%3ES%2B%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top"><div>
+  <b>SEVERE++</b>
+  <a href="#problem">The problem</a><a href="#factors">Four factors</a><a href="#summary">Who wins</a><a href="#benchmark">Benchmark</a><a href="#cite">Cite</a>
+</div></nav>
+
+<header class="hero"><div class="col" style="max-width:820px">
+  <span class="eyebrow">IJCV 2026 · extended from ECCV 2022</span>
+  <h1>SEVERE<sup>++</sup></h1>
+  <p class="sub">Evaluating Benchmark Sensitivity in Generalization of Video Representation Learning</p>
+
+  <p class="authors">
+    <a href="https://fmthoker.github.io/">Fida Mohammad Thoker</a><sup>1*</sup>,
+    Letian Jiang<sup>1</sup>,
+    Chen Zhao<sup>2*</sup>,
+    <a href="https://bpiyush.github.io">Piyush Bagad</a><sup>3</sup>,
+    <a href="https://hazeldoughty.github.io/">Hazel Doughty</a><sup>4</sup>,
+    Bernard Ghanem<sup>1</sup>,
+    <a href="https://www.ceessnoek.info/">Cees G. M. Snoek</a><sup>5</sup>
+  </p>
+  <p class="affil"><sup>1</sup>KAUST &nbsp; <sup>2</sup>Harbin Institute of Technology, Shenzhen &nbsp; <sup>3</sup>University of Oxford &nbsp; <sup>4</sup>Leiden University &nbsp; <sup>5</sup>University of Amsterdam &nbsp; · &nbsp; <sup>*</sup>corresponding</p>
+
+  <div class="links">
+    <span class="off" title="Link coming soon">Paper — IJCV, to appear</span>
+    <a class="pri" href="https://github.com/fmthoker/SEVERE-BENCHMARK-plus-plus">Code ↗</a>
+    <a href="https://arxiv.org/abs/2203.14221">ECCV’22 paper</a>
+    <a href="https://bpiyush.github.io/SEVERE-website/">ECCV’22 page</a>
+    <a href="#cite">BibTeX</a>
+  </div>
+</div></header>
+
+<main>
+<div class="wide">
+  <figure class="big">
+    <div class="fig-frame"><img src="assets/concept.webp" width="1600" height="640" alt="Concept figure: models pre-trained on Kinetics-400 are tested on four kinds of downstream shift — domain, samples, actions and tasks." fetchpriority="high"></div>
+    <figcaption><b>The setup.</b> Every model is pre-trained once, then asked to transfer along four axes: to different <b>domains</b>, with fewer <b>samples</b>, to more similar <b>actions</b>, and to other <b>tasks</b>. Same figure as the ECCV paper — what changed is who is being tested.</figcaption>
+  </figure>
+</div>
+
+<div class="col" style="margin-top:44px">
+  <p class="dropcap">Video self-supervised learning has a measuring problem. For years, almost every paper has pre-trained on Kinetics-400 and then finetuned on something that looks a lot like Kinetics-400. Models that win there are declared the state of the art. But <em class="hl">does winning there tell you anything about the video you actually care about?</em></p>
+  <p>Four years ago, we asked this of ten CNN-based methods and the answer was <em>not really</em>. The field has since moved to transformers, to masked autoencoding, and to video-text pre-training. So we asked again, of 22 models this time.</p>
+  <div class="stats">
+    <div><b>22</b><span>models</span></div>
+    <div><b>1,100+</b><span>experiments</span></div>
+    <div><b>8</b><span>video datasets</span></div>
+    <div><b>7</b><span>downstream tasks</span></div>
+  </div>
+</div>
+
+<!-- ============================================================== PROBLEM -->
+<section id="problem" style="margin-top:72px">
+<div class="col">
+  <span class="eyebrow">§1 · The problem</span>
+  <h2>The leaderboard you know is not the one you get</h2>
+  <p>Below, every line is one model. The left-most column is the standard yardstick, finetuning accuracy on Kinetics-400, and each next column re-ranks the same models on a different downstream dataset. If Kinetics-400 predicted transfer, the lines would run flat. They don’t.</p>
+  <aside class="mn" style="top:20px">flat lines would mean K400 is enough. these are not flat.
+    <svg width="60" height="30" viewBox="0 0 60 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4 C 20 4, 38 12, 54 24 M54 24 l-9 -1 M54 24 l-2 -9"/></svg></aside>
+</div>
+<div class="wide">
+  <div class="chart frame" id="c-bump">
+    <h4>Rank of each model, per downstream dataset</h4>
+    <p class="dek">Rank 1 is best. Switch families on and off to re-rank within a family. The ranks are among the models shown.</p>
+    <div class="ctrl">
+      <span class="seg" role="group" aria-label="Evaluation protocol"><button data-mode="ft" class="on">finetune</button><button data-mode="lin">linear probe</button></span>
+      <span class="legend ctrl" style="margin:0"></span>
+    </div>
+    <div class="chart-svg"></div>
+    <div class="readout"></div>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:22px">The reshuffling is not noise at the margins. Switch to the linear probe, where the backbone is frozen, and the order is shuffled again. Then hide everything but the CNNs: among them, the Kinetics-400 rank says almost nothing about the rank on EPIC-Kitchens (Spearman ρ = +0.10).</p>
+
+  <h3>Who we tested</h3>
+  <p>Ten CNNs, seven video-only transformers and five video-text transformers. All models are public checkpoints evaluated under one downstream protocol. CNNs share an R(2+1)D-18 backbone and all CNNs and video-only transformers (ViT-B) were pre-trained on Kinetics-400, so what differs within these groups is the objective. The video-text models differ in pre-training data too, as there is no standard video-text corpus.</p>
+</div>
+<div class="wide"><div class="roster" id="roster"></div></div>
+<div class="col"><p class="callout" style="margin-top:26px"><b>Read this as a benchmark of off-the-shelf models,</b> not a controlled study of architecture or objective. Models differ in more than one way, and we are explicit about that in the limitations below.</p></div>
+</section>
+
+<!-- ============================================================== FACTORS -->
+<section id="factors">
+<div class="col">
+  <span class="eyebrow">§2 · Four things that change downstream</span>
+  <h2>Sensitivity, one factor at a time</h2>
+  <p>We keep the pre-training fixed and move the downstream setting along four axes, as in the ECCV paper. Each of the next four sections has one chart.</p>
+</div>
+
+<!-- I DOMAIN -->
+<div class="col" style="margin-top:56px"><div class="fac fac-domain">
+  <span class="fnum">Factor I · Domain</span>
+  <h3 style="margin-top:0;font-size:32px">How far is the downstream data from Kinetics?</h3>
+  <p>We finetune or linearly probe on six datasets that range from the familiar (UCF-101) to egocentric kitchens (EPIC-Kitchens-100), gymnastics (FineGym) and object-centric motion (Something-Something v2).</p>
+</div></div>
+<div class="wide"><figure><div class="fig-frame" style="max-width:760px;margin:0 auto"><img loading="lazy" src="assets/domains.webp" width="1200" height="504" alt="Example frames from Kinetics-400, UCF-101, NTU-60, FineGym, Something-Something, EPIC-Kitchens-100, Charades and AVA"></div><figcaption style="margin:10px auto 0">Frames from the datasets we use. Kinetics-400 and UCF-101 look alike; the rest are increasingly foreign.</figcaption></figure></div>
+<div class="col">
+  <p style="margin-top:26px">Play with the plot below. Pick any two evaluations. With <span class="hl">Kinetics-400 on one axis and a distant domain on the other</span>, the points scatter; with two similar datasets they line up.</p>
+  <aside class="mn l" style="top:30px">hollow squares = supervised pre-training (shown whenever x is not K400)
+    <svg width="50" height="26" viewBox="0 0 50 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-left:auto"><path d="M46 3 C 30 3, 14 10, 6 22 M6 22 l9 -1 M6 22 l2 -9"/></svg></aside>
+</div>
+<div class="wide">
+  <div class="chart frame" id="c-scatter">
+    <h4>Compare any two downstream evaluations</h4>
+    <p class="dek">Each dot is a model; colour is its family. Tap a dot to pin it.</p>
+    <div class="ctrl">
+      <label>x <select name="x"></select></label>
+      <label>y <select name="y"></select></label>
+      <span class="legend-inline sans" style="font-size:13px;color:var(--muted)"><i style="background:var(--cnn)"></i>CNN <i style="background:var(--vo)"></i>video-only <i style="background:var(--vt)"></i>video-text</span>
+    </div>
+    <div class="ctrl" style="margin-top:-2px"><span style="color:var(--muted)">try:</span>
+      <button class="chip on" data-preset="ft0,ft1" type="button">K400 → UCF-101</button>
+      <button class="chip on" data-preset="ft0,ft3" type="button">K400 → Gym-99</button>
+      <button class="chip on" data-preset="ft0,ft5" type="button">K400 → EK-100</button>
+      <button class="chip on" data-preset="ft1,lin1" type="button">UCF finetune → linear</button>
+    </div>
+    <div class="chart-svg"></div>
+    <div class="readout"></div>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:22px"><b>What we see.</b> Self-supervised video transformers are clearly more robust to domain shift than CNNs, and they beat supervised pre-training on the most distant domains (Gym-99, SS-v2). But the <em>video-text</em> models, despite pre-training on 10–25M pairs against Kinetics’ 240K videos, lag the video-only models on Gym-99, SS-v2 and EK-100. Good Kinetics-400 accuracy does not tell you which video-text model will transfer. One plausible reason is that aligning video with text can be solved by high-level spatial semantics, without much temporal learning.</p>
+</div>
+
+<!-- II SAMPLES -->
+<div class="col" style="margin-top:72px"><div class="fac fac-samples">
+  <span class="fnum">Factor II · Samples</span>
+  <h3 style="margin-top:0;font-size:32px">What if you only have a thousand labelled clips?</h3>
+  <p>We finetune with 1,000 samples instead of the full training set. The slope chart shows each model’s accuracy at 1k samples (left) and with everything (right).</p>
+</div></div>
+<div class="wide">
+  <div class="chart frame" id="c-slope">
+    <h4>Low-data versus full-data finetuning</h4>
+    <p class="dek">Crossing lines are rank changes. Note how the fan of results on the left collapses on the right.</p>
+    <div class="chart-svg"></div>
+    <div class="readout"></div>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:22px"><b>What we see.</b> With enough data the gap between methods shrinks, so full-data numbers hide differences that matter when labels are scarce. In the low-data regime, ranks change a lot and the best CNN methods often beat transformers. Supervised CNN pre-training is the model to beat at 1k samples. Video-text transformers are steadier across sample sizes, with UMT best in most settings, but they are on par with or worse than the CNN and video-only models in several low-data cases.</p>
+  <aside class="mn" style="top:-80px">supervised ViT: worst on Gym-99 with all the data, yet second-best video-only model on UCF at 1k.</aside>
+</div>
+
+<!-- III ACTIONS -->
+<div class="col" style="margin-top:72px"><div class="fac fac-actions">
+  <span class="fnum">Factor III · Actions</span>
+  <h3 style="margin-top:0;font-size:32px">Can it tell a layout from a layout-with-a-twist?</h3>
+  <p>Within FineGym, we go from coarse (99 classes across events) to fine-grained subsets in which classes look nearly identical, such as <em>giant circle forwards</em> versus <em>backwards</em>.</p>
+</div></div>
+<div class="wide">
+  <div class="chart frame" id="c-actions">
+    <h4>Six action granularities, thread one model through all of them</h4>
+    <p class="dek">Each row has its own axis from worst to best model. Vault is the odd one out: intense motion that most video models handle badly.</p>
+    <div class="chart-svg"></div>
+    <div class="readout"></div>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:22px"><b>What we see.</b> Rankings change a lot between subsets. VideoMAE is the worst video-only model on Gym-99 but third best on FX-S1. The best CNNs, Tubelet-Contrast and CtP in particular, <em class="hl">outperform the best video-only transformers on almost every granularity</em> (UB-S1 is a dead heat). Methods built to be invariant to time reversal suffer where direction matters (GDT on UB-S1). Surprisingly, CLIP and MoCo are among the best on Vault, which suggests image-style features cope with intense motion better than current video encoders.</p>
+</div>
+
+<!-- IV TASKS -->
+<div class="col" style="margin-top:72px"><div class="fac fac-tasks">
+  <span class="fnum">Factor IV · Tasks</span>
+  <h3 style="margin-top:0;font-size:32px">Beyond classification</h3>
+  <p>Spatio-temporal action detection, repetition counting, arrow-of-time, temporal action localization (new in this paper, on ActivityNet), and multi-label recognition. Some tasks stay in the Kinetics-adjacent domain; the last three move out of it.</p>
+</div></div>
+<div class="wide">
+  <div class="chart frame" id="c-tasks">
+    <h4>Seven task settings</h4>
+    <p class="dek">Repetition counting is an error, so its axis is flipped: right is always better. Scores of different families on the same task come from different downstream heads, so read cross-family gaps as indicative.</p>
+    <div class="chart-svg"></div>
+    <div class="readout"></div>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:22px"><b>What we see.</b> Self-supervision helps well beyond action recognition, but how well a model does at recognition says little about repetition counting or localization. Everyone struggles when domain <em>and</em> task change. Video-only transformers are the most consistent across tasks, and notably better than CNNs everywhere but repetition counting. Video-text models are generally worse than the top video-only ones, with the clear exception of multi-label recognition, where UMT is best of all.</p>
+</div>
+</section>
+
+<hr class="hr-ink">
+
+<!-- ============================================================== SUMMARY -->
+<section id="summary">
+<div class="col">
+  <span class="eyebrow">§3 · Putting it together</span>
+  <h2>Does Kinetics-400 predict anything?</h2>
+  <p>For each downstream setting we computed the Spearman rank correlation between a model’s Kinetics-400 finetuning accuracy and its score there. Values near +1 mean “K400 order ≈ this order”; near 0, K400 is no help.</p>
+</div>
+<div class="wide">
+  <div class="chart frame" id="c-corr">
+    <h4>Rank correlation with Kinetics-400 finetuning</h4>
+    <p class="dek">The ringed dot pools all 22 self-supervised and video-text models. Coloured dots are per family (only 5 video-text models, so treat them gently). Computed live from the paper’s tables; supervised baselines excluded.</p>
+    <div class="ctrl"><button class="tog" data-toggle="lin" type="button">+ linear-probe domains</button></div>
+    <div class="chart-svg"></div>
+    <div class="readout">Hover a dot.</div>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:22px">Pooled over all models, Kinetics-400 predicts UCF-101, SS-v2 and EK-100 well (ρ ≥ 0.78), but largely because transformers beat CNNs on all of them. On FineGym-99, and on every action subset, it is <em class="hl">anti-correlated (ρ ≈ −0.5)</em>, again because CNNs win there. Within CNNs the correlation fades as the domain gets further away: +0.78 on UCF-101, +0.10 on EPIC-Kitchens. Video-only transformers are the most predictable family. With five models, the video-text family bounces around, which is itself a warning against trusting one benchmark.</p>
+
+  <h3>Who wins where</h3>
+  <p>Below is the best model of each family on each column of the new benchmark. Positions are scaled from worst to best among all 22 models.</p>
+</div>
+<div class="wide">
+  <div class="chart frame" id="c-family">
+    <h4>Best of each family, per SEVERE++ column</h4>
+    <p class="dek">No family wins every row. Transformers lead on SS-v2 and multi-label recognition; CNNs lead on Gym-99, low-data Gym-99, FX-S1 and repetition counting.</p>
+    <div class="chart-svg"></div>
+    <div class="readout"></div>
+  </div>
+</div>
+
+<div class="col">
+  <h3>What we take from it</h3>
+  <ol class="obs">
+    <li><b>No clear winner.</b><span>Different models stand out in different settings, in every family. Nothing is best across the board.</span></li>
+    <li><b>Transformers are not the best everywhere.</b><span>They are more robust than CNNs to domain and task shift, but trail CNNs on fine-grained actions and when finetuning samples are scarce.</span></li>
+    <li><b>Video-only matches or beats video-text.</b><span>With 240K Kinetics videos against 2–25M pairs, video-only transformers are on par or better. The best video-text model, UMT, also uses a video-only masked encoder.</span></li>
+    <li><b>Supervised pre-training still matters for CNNs.</b><span>It dominates in low-data, and under joint domain and task shift. For transformers it falls well behind the best self-supervised models.</span></li>
+    <li><b>Some invariances hurt.</b><span>Learning invariance to temporal reversal, as GDT does, costs accuracy on actions that differ in direction, like Something-Something or UB-S1.</span></li>
+    <li><b>Motion in pre-training helps.</b><span>Synthetic motion in CtP and Tubelet-Contrast makes them the strongest CNNs. LocoMotion, a video-text model, matches VindLU with about a tenth of the data.</span></li>
+    <li><b>Reconstruct semantics, not pixels.</b><span>Among masked autoencoders, those that predict high-level targets (HOG in MME, DINO features in SIGMA) generalise best.</span></li>
+  </ol>
+</div>
+</section>
+
+<hr class="hr-ink">
+
+<!-- ============================================================== BENCHMARK -->
+<section id="benchmark">
+<div class="col">
+  <span class="eyebrow">§4 · Use it</span>
+  <h2>SEVERE-benchmark++</h2>
+  <p>Nobody wants to run 1,100 experiments. So we distilled the study into a <em class="hl">compact benchmark</em>: two evaluations per factor, plus Kinetics-400 as the standard reference.</p>
+  <ul style="font:400 16.5px/1.6 var(--sans);padding-left:1.1em">
+    <li><b style="color:var(--f-domain)">Domain.</b> Finetune on Something-Something v2 and FineGym-99.</li>
+    <li><b style="color:var(--f-samples)">Samples.</b> Finetune on 1,000 samples of UCF-101 and FineGym-99.</li>
+    <li><b style="color:var(--f-actions)">Actions.</b> FineGym subsets FX-S1 and UB-S1.</li>
+    <li><b style="color:var(--f-tasks)">Tasks.</b> Repetition counting (UCF-RC) and multi-label recognition (Charades).</li>
+  </ul>
+  <p>Stronger shading means a better rank. Click a column to sort. “Mean rank” is a convenience of this page, not a score proposed in the paper.</p>
+</div>
+<div class="wide">
+  <div class="chart frame" id="c-board">
+    <div class="board"></div>
+    <p class="sans" style="font-size:12.5px;color:var(--muted);margin:10px 0 0">Ranks are among all 24 rows, supervised baselines included. MGM has no 1k-sample numbers in the paper’s benchmark table, so its mean rank is left blank.</p>
+  </div>
+</div>
+<div class="col">
+  <p style="margin-top:24px">Code, checkpoints and evaluation recipes live in the <a href="https://github.com/fmthoker/SEVERE-BENCHMARK-plus-plus">SEVERE-BENCHMARK-plus-plus</a> repository (being updated).</p>
+
+  <h3>Limitations</h3>
+  <p style="font-size:17px">Pre-training is fixed to Kinetics-400 for CNNs and video-only transformers, and the video-text models use whatever data their authors chose. We use R(2+1)D-18 and ViT-B only; larger backbones remain open. Tasks centre on human actions and encoder-only evaluation, so multimodal reasoning such as video question answering is out of scope. We evaluate off-the-shelf models, so differences in augmentation, schedule and data are folded into the results.</p>
+</div>
+</section>
+
+<!-- ============================================================== CITE -->
+<section id="cite">
+<div class="col">
+  <span class="eyebrow">§5 · Cite</span>
+  <h2>BibTeX</h2>
+  <div class="bib-h"><span>SEVERE++ (IJCV 2026)</span><button data-copy="bib1" type="button">copy</button></div>
+<pre id="bib1">@article{thoker2026severepp,
+  title   = {{SEVERE++}: Evaluating Benchmark Sensitivity in Generalization of Video Representation Learning},
+  author  = {Thoker, Fida Mohammad and Jiang, Letian and Zhao, Chen and Bagad, Piyush and Doughty, Hazel and Ghanem, Bernard and Snoek, Cees G. M.},
+  journal = {International Journal of Computer Vision},
+  year    = {2026}
+}</pre>
+  <div class="bib-h"><span>The original SEVERE (ECCV 2022)</span><button data-copy="bib2" type="button">copy</button></div>
+<pre id="bib2">@inproceedings{thoker2022severe,
+  title     = {How Severe is Benchmark-Sensitivity in Video Self-Supervised Learning?},
+  author    = {Thoker, Fida Mohammad and Doughty, Hazel and Bagad, Piyush and Snoek, Cees G. M.},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2022}
+}</pre>
+</div>
+</section>
+</main>
+
+<footer><div class="col">
+  <p>SEVERE++ is a follow-up to <a href="https://bpiyush.github.io/SEVERE-website/">How Severe is Benchmark-Sensitivity in Video Self-Supervised Learning?</a> (ECCV 2022); the concept figure and dataset frames come from the papers. All charts on this page are drawn from the numbers in the paper’s tables, in plain SVG with no libraries.</p>
+  <p>Page source is licensed <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div></footer>
+
+<script src="data.js"></script>
+<script src="charts.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("roster");
+  Object.keys(FAM).forEach(function (f) {
+    var sec = document.createElement("div");
+    var ms = M.filter(function (m) { return m.fam === f && !m.sup; });
+    sec.innerHTML = '<h5 style="--c:' + FAM[f].color + '">' + FAM[f].name + ' · ' + ms.length + '<span>' + FAM[f].long + '</span></h5><ul>' +
+      ms.map(function (m) { return '<li><b>' + m.id + '</b><small>' + m.obj + ' · ' + m.data + '</small></li>'; }).join("") + '</ul>';
+    host.appendChild(sec);
+  });
+})();
+</script>
+</body>
+</html>
